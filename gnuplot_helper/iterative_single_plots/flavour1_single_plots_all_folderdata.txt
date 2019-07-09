@@ -1,53 +1,20 @@
-NX=2; NY=2
-DX=0.17; DY=0.11; SX=0.30; SY=0.30
-set terminal postscript color size 11, 11
-set output 'four_stacked.ps'
-set multiplot layout 2,2 \
-              margins 0.2,0.9,0.2,0.9 \
-              spacing 0.1,0.12
-
-set xrange [-6:6]
-set yrange [-1.2*10**-10:1.2*10**-10]
-set xlabel 'Bias Voltage (V)'
-set ylabel 'Measured Photocurrent (A)'
-set pointsize 0.7
-
-set key bottom
+set terminal postscript color size 8, 8
+set xrange [100:3200]
+set yrange [-100:900]
+set xlabel 'Raman Shift/cm^-1'
+set ylabel 'Intensity/A.U.'
 set key box vertical width 1.5 height 1 maxcols 1 spacing 1.2
 set key samplen 1.9 spacing 1 font ",10"
+set key top
+set style line 1 ps 0.5 pt 1 lc rgb "red"
 
-##—— First Figure
-set title '{/:Bold a}'
-unset xlabel
-power = "5.0 10 20 30 50 70 90 120"
+speed = '6 12 25 50 '
+do for [t = 16:19]{
+do for [i in speed] {
+  set output 'gnuplot_quickplot/7mWgreen_100%_5scans_raman_butterflycnt_'.t.'mW_'.i.'ums_cut.ps'
+  plot '7mWgreen_100%_5scans_raman_butterflycnt_'.t.'mW_'.i.'ums_cut.txt' with points ls 1
+}
+}
 
-plot for [i in power] 'red/R_IV_' .i. 'uW.txt' using 3:2 title i. ' {/Symbol m}W', 'red/R_IV_dark.txt' using 3:2 title 'Dark'
-
-
-###——Second Figure
-set title '{/:Bold b}'
-power = "0.5 5.0 10 30 50 70"
-
-unset ylabel
-plot for [i in power] 'green/G_IV_' .i. 'uW.txt' using 3:2 title i. ' {/Symbol m}W', 'green/G_IV_dark.txt' using 3:2 title 'Dark'
-
-##—— Third Figure
-set ylabel 'Measured Photocurrent (A)'
-set title '{/:Bold c}'
-power = "0.5 5.0 10 20 30 40 50 70 90"
-set xlabel 'Bias Voltage (V)'
-
-plot for [i in power] 'blue/B_IV_' .i. 'uW.txt' using 3:2 title i. ' {/Symbol m}W', 'blue/B_IV_dark.txt' using 3:2 title 'Dark'
-
-##—— Fourth Figure
-unset ylabel
-set title '{/:Bold d}'
-power = "1.0 2.0 5.0 10 15 20 30 40 50"
-
-plot for [i in power] 'uv/UV_IV_' .i. 'uW.txt' using 3:2 title i. ' {/Symbol m}W', 'uv/UV_IV_dark.txt' using 3:2 title 'Dark'
-
-unset multiplot
 clear
 reset
-
-
